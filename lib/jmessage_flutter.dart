@@ -302,7 +302,7 @@ class JmessageFlutter {
         for (JMSyncRoamingMessageListener cb
             in _eventHanders.syncRoamingMessage) {
           Map json = call.arguments.cast<dynamic, dynamic>();
-          cb(JMConversationInfo.fromJson(json));
+          cb(JMConversationInfo.fromJson(json['conversation']));
         }
         break;
       case 'onContactNotify':
@@ -1513,7 +1513,6 @@ class JmessageFlutter {
   }) async {
     Map resJson = await _channel.invokeMethod('getChatRoomConversation',
         {'roomId': roomId}..removeWhere((key, value) => value == null));
-
     return JMConversationInfo.fromJson(resJson);
   }
 
@@ -2218,17 +2217,20 @@ enum JMEventType { group_member_added, group_member_removed, group_member_exit }
 class JMEventMessage extends JMNormalMessage {
   JMEventType eventType; // 事件类型
   List<dynamic> usernames; // List<String>
+  List<dynamic> nicknames; // List<String>
 
   Map toJson() {
     var json = super.toJson();
     json['eventType'] = getStringFromEnum(eventType);
     json['usernames'] = usernames;
+    json['nicknames'] = nicknames;
     return json;
   }
 
   JMEventMessage.fromJson(Map<dynamic, dynamic> json)
       : eventType = getEnumFromString(JMEventType.values, json['eventType']),
         usernames = json['usernames'],
+        nicknames = json['nicknames'],
         super.fromJson(json);
 }
 
@@ -2448,7 +2450,7 @@ class JMGroupMemberInfo {
 class JMChatRoomInfo {
   String roomId; // 聊天室 id
   String name; // 聊天室名称
-  String appKey; // 聊天室所属应用的 App Key
+  String? appKey; // 聊天室所属应用的 App Key
   String description; // 聊天室描述信息
   int createTime; // 创建日期，单位：秒
   int maxMemberCount; // 最大成员数

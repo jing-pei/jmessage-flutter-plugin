@@ -315,6 +315,14 @@ class JsonUtils {
                 if (usernameList != null) {
                     result.put("usernames", toJson(usernameList));
                 }
+                Log.d("flutter plugin", "usernameList:" + usernameList);
+
+                List displayNameList = ((EventNotificationContent) content).getUserDisplayNames();
+                if (displayNameList != null) {
+                    result.put("nicknames", toJson(displayNameList));
+                }
+                Log.d("flutter plugin", "displayNameList:" + displayNameList);
+
                 switch (((EventNotificationContent) content).getEventNotificationType()) {
                     case group_member_added:
                         // 群成员加群事件

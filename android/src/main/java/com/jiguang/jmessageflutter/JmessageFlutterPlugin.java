@@ -312,6 +312,8 @@ public class JmessageFlutterPlugin implements FlutterPlugin, MethodCallHandler {
             setMessageHaveRead(call, result);
         } else if (call.method.equals("sendVideoMessage")) {
             sendVideoMessage(call, result);
+        } else if(call.method.equals("getMessageHaveReadStatus")){
+            getMessageHaveReadStatus(call,result);
         } else {
             result.notImplemented();
         }
@@ -2726,6 +2728,10 @@ public class JmessageFlutterPlugin implements FlutterPlugin, MethodCallHandler {
             JSONObject params = new JSONObject(map);
             chatRoomId = Long.parseLong(params.getString("roomId"));
             Conversation conversation = JMessageClient.getChatRoomConversation(chatRoomId);
+            if (null == conversation) {
+                handleResult(ERR_CODE_CONVERSATION, ERR_MSG_CONVERSATION, result);
+                return;
+            }
             result.success(toJson(conversation));
         } catch (Exception e) {
             e.printStackTrace();
@@ -3188,15 +3194,15 @@ public class JmessageFlutterPlugin implements FlutterPlugin, MethodCallHandler {
             HashMap json = new HashMap();
             json.put("conversation", toJson(event.getConversation()));
 
-            if (!mHasRoamingMsgListener) {
-                if (mRoamingMessageCache == null) {
-                    mRoamingMessageCache = new ArrayList<HashMap>();
-                }
-                mRoamingMessageCache.add(json);
-
-            } else if (mRoamingMessageCache == null) { // JS 已添加监听事件，没有缓存，直接触发事件。
+//            if (!mHasRoamingMsgListener) {
+//                if (mRoamingMessageCache == null) {
+//                    mRoamingMessageCache = new ArrayList<HashMap>();
+//                }
+//                mRoamingMessageCache.add(json);
+//
+//            } else if (mRoamingMessageCache == null) { // JS 已添加监听事件，没有缓存，直接触发事件。
                 JmessageFlutterPlugin.instance.channel.invokeMethod("onSyncRoamingMessage", json);
-            }
+//            }
         }
     }
 

@@ -1,3 +1,13 @@
+## 2.2.1
++修复  addSyncRoamingMessageListener 没回调问题
+## 2.2.0
++修复  enterChatRoom getChatRoomConversation 方法
+## 2.1.9
++补充  nicknames 字段
+## 2.1.8
++新增  nicknames 字段
+## 2.1.7
++修复：修复未实现方法getMessageHaveReadStatus
 ## 2.1.6
 +修复：修复判空异常
 ## 2.1.4

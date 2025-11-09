@@ -63,10 +63,10 @@ class _MyHomePageState extends State<MyHomePage> {
     // initPlatformState();
 
     jmessage..setDebugMode(enable: true);
+    addListener();
     jmessage.init(isOpenMessageRoaming: true, appkey: kMockAppkey);
     jmessage.applyPushAuthority(
         JMNotificationSettingsIOS(sound: true, alert: true, badge: true));
-    addListener();
   }
 
   void demoShowMessage(bool isShow, String msg) {
@@ -353,7 +353,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     jmessage.addSyncRoamingMessageListener((conversation) {
-      verifyConversation(conversation);
       print('listener receive event - sync roaming message');
     });
 
